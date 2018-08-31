@@ -150,3 +150,32 @@ class NeuralNetwork:
         y = self.layers[-1].a > 0.5
         y = y.astype(int)
         return y
+
+
+class KMeans:
+    def __init__(self, k=5):
+        self.k = k
+        self.centroids = None
+
+    def _initialize_centroids(self, n_x,):
+        self.centroids = np.random.randn(self.k, n_x) + 1
+
+    def _find_closest_centroids(self, x):
+        diffs = np.zeros((x.shape[0], self.k))
+        for i in range(self.k):
+            diffs[:,i] = np.sum(np.square(x - self.centroids[i]), axis=1)
+        return np.argmin(diffs, axis=1).reshape(x.shape[0], 1)
+
+    def _compute_centroids(self, x, groups):
+        for i in range(self.k):
+            xset = x[groups[groups == 1], :]
+            self.centroids[i, 1] = (1 / len(xset)) * np.sum(xset)
+
+    def predict(self, x, num_iterations):
+        self._initialize_centroids(x.shape[1])
+
+        for i in range(num_iterations):
+            groups = self._find_closest_centroids(x)
+            self._compute_centroids(x, groups)
+
+        return groups

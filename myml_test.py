@@ -1,4 +1,5 @@
 import myml
+import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -65,3 +66,11 @@ test_predictions = model.predict(X_test)
 print('Neural Network Cost: {0}'.format(model.costs[-1]))
 print('Neural Network Train accuracy: {0}'.format(accuracy_score(y_train, train_predictions)))
 print('Neural Network Test accuracy: {0}'.format(accuracy_score(y_test, test_predictions)))
+
+# Train the KMeans model
+print('--------------------------------------------------')
+print('KMeans')
+print('--------------------------------------------------')
+model = myml.KMeans(k=2)
+groups = model.predict(X_train, 1000)
+print(np.unique(groups, return_counts=True))
